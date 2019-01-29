@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Link from "react-router-dom/es/Link";
 import axios from 'axios';
+import {withRouter} from "react-router-dom";
 
 
 class CreateCourse extends Component {
@@ -34,7 +35,9 @@ class CreateCourse extends Component {
                 materialsNeeded,
                 }, { headers: { 'Authorization' : JSON.parse(window.localStorage.getItem('auth'))}
             });
-            console.log(response);
+            if(response.status === 201){
+                this.props.history.push('/');
+            }
         } catch (e) {
             console.log(e.response);
         }
@@ -133,4 +136,4 @@ class CreateCourse extends Component {
         }
 }
 
-export default CreateCourse;
+export default withRouter(CreateCourse);

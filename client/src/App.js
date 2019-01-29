@@ -18,7 +18,16 @@ class App extends Component {
       signedIn: false
   };
 
-   signIn = async (email, password, history) => {
+  componentDidMount() {
+    if(localStorage.user){
+        this.setState({
+            signedIn: true,
+            currentUser: JSON.parse(window.localStorage.getItem('user'))
+        })
+    }
+  }
+
+    signIn = async (email, password, history) => {
       try {
           const response = await axios.get('http://localhost:5000/api/users',
               { auth: {username: email, password: password} });

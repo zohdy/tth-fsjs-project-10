@@ -42,11 +42,13 @@ class CourseDetail extends Component {
         }
     }
 
-    // TODO
      deleteCourse = async () => {
         try{
-            const response = await axios.delete(`http://localhost:5000/api/courses/${this.props.id}`);
-            console.log(response.data)
+            const response = await axios.delete(`http://localhost:5000/api/courses/${this.props.id}`,
+                {headers: {'Authorization': JSON.parse(window.localStorage.getItem('auth'))}});
+                if(response.status === 204){
+                    this.props.history.push('/');
+                }
         } catch (e) {
             console.log(e.response)
         }
