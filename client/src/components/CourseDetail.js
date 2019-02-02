@@ -24,7 +24,7 @@ class CourseDetail extends Component {
             });
         } catch (e) {
             e.response.status === 404 ?
-                this.props.history.push('/page-not-found') : this.props.history.push('/error');
+                this.props.history.push('/notfound') : this.props.history.push('/error');
         }
     }
 

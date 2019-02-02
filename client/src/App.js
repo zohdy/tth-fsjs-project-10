@@ -68,7 +68,7 @@ class App extends Component {
               <Route exact path="/signout" render={() => <UserSignOut signOut={this.signOut}/>}/>
               <Route path="/forbidden" component={ Forbidden } />
               <Route path="/error" component={ UnhandledError } />
-              <Route path="/page-not-found" component={ NotFound } />
+              <Route path="/notfound" component={ NotFound } />
               <Route component={ NotFound } />
           </Switch>
       </div>

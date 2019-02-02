@@ -34,7 +34,7 @@ class UpdateCourse extends Component {
                 });
         } catch (e) {
             if(e.response.status === 404) {
-                this.props.history.push('/not-found');
+                this.props.history.push('/notfound');
             }  if(e.response.status === 401 || e.response.status === 403) {
                 this.props.history.push('/forbidden');
             } else {
