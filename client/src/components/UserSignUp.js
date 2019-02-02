@@ -97,6 +97,7 @@ class UserSignUp extends Component {
                                         type="email"
                                         placeholder="Email Address"
                                         value={ emailAddress }
+                                        autoComplete="username"
                                     />
                                 </div>
                                 <div>
@@ -107,6 +108,7 @@ class UserSignUp extends Component {
                                         type="password"
                                         placeholder="Password"
                                         value={ password }
+                                        autoComplete="new-password"
                                     />
                                 </div>
                                 <div>
@@ -117,6 +119,7 @@ class UserSignUp extends Component {
                                         type="password"
                                         placeholder="Confirm Password"
                                         value={ confirmPassword }
+                                        autoComplete="new-password"
                                     />
                                 </div>
                                 <div className="grid-100 pad-bottom">

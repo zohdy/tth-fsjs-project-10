@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from "axios";
 import Link from "react-router-dom/es/Link";
+import {withRouter} from "react-router-dom";
 
 class Courses extends Component {
 
@@ -17,7 +18,7 @@ class Courses extends Component {
                 isLoaded: true
             })
         } catch (e) {
-            console.log(e.response);
+            this.props.history.push('/error');
         }
     }
 
@@ -25,7 +26,7 @@ class Courses extends Component {
         const { isLoaded, courses } = this.state;
 
         if(!isLoaded){
-            return <div>Loading...</div>
+            return <div className="loader">Loading...</div>
         }
 
         return (
@@ -52,4 +53,4 @@ class Courses extends Component {
     }
 }
 
-export default Courses;
+export default withRouter(Courses);

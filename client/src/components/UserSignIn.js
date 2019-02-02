@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Link from "react-router-dom/es/Link";
 import {withRouter} from "react-router-dom";
+import Redirect from "react-router-dom/es/Redirect";
 
 class UserSignIn extends Component {
 
@@ -15,11 +16,19 @@ class UserSignIn extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.signIn(this.state.emailAddress, this.state.password, this.props.history);
+        this.props.signIn(this.state.emailAddress, this.state.password);
     };
 
     render() {
         const { emailAddress, password } = this.state;
+        const { from } = this.props.location.state || { from: { pathname: '/'}};
+
+        if(localStorage.getItem('auth')){
+            return (
+                <Redirect to={from} />
+            )
+        }
+
         return (
             <div className="bounds">
                 <div className="grid-33 centered signin">
@@ -34,6 +43,8 @@ class UserSignIn extends Component {
                                     onChange={this.handleChange}
                                     placeholder="Email Address"
                                     value={ emailAddress }
+                                    autoComplete="username"
+
                                 />
                             </div>
                             <div>
@@ -44,6 +55,7 @@ class UserSignIn extends Component {
                                     onChange={this.handleChange}
                                     placeholder="Password"
                                     value={ password }
+                                    autoComplete="current-password"
                                 />
                             </div>
                             <div className="grid-100 pad-bottom">

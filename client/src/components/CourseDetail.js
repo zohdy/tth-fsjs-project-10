@@ -8,7 +8,9 @@ class CourseDetail extends Component {
     state = {
         course : {},
         courseOwner: {},
-        materialsNeeded: ''
+        materialsNeeded: '',
+        displayError: false,
+        errorMsg: ''
     };
 
     async componentDidMount() {
@@ -21,8 +23,7 @@ class CourseDetail extends Component {
             });
         } catch (e) {
             e.response.status === 404 ?
-                this.props.history.push('/page-not-found') :
-                this.props.history.push('/error');
+                this.props.history.push('/page-not-found') : this.props.history.push('/error');
         }
     }
 
@@ -44,13 +45,18 @@ class CourseDetail extends Component {
 
      deleteCourse = async () => {
         try{
-            const response = await axios.delete(`http://localhost:5000/api/courses/${this.props.id}`,
+            await axios.delete(`http://localhost:5000/api/courses/${this.props.id}`,
                 {headers: {'Authorization': JSON.parse(window.localStorage.getItem('auth'))}});
-                if(response.status === 204){
-                    this.props.history.push('/');
-                }
+                this.props.history.goBack();
         } catch (e) {
-            console.log(e.response)
+            if(e.response.status === 401 || e.response.status === 403){
+                this.setState({
+                    errorMsg: e.response.data.message,
+                    displayError: true,
+                });
+            } else {
+                this.props.history.push('/error');
+            }
         }
     };
 
@@ -64,7 +70,7 @@ class CourseDetail extends Component {
                     <div className="bounds">
                         <div className="grid-100">
                             <span>
-                                <Link className="button" to={`/courses/${this.props.id}/update}`}>Update Course</Link>
+                                <Link className="button" to={`/courses/${this.props.id}/update`}>Update Course</Link>
                                 <button className="button" onClick={this.deleteCourse}>Delete Course</button>
                             </span>
                                 <Link className="button button-secondary" to="/">Return to List</Link>
@@ -73,6 +79,14 @@ class CourseDetail extends Component {
                 </div>
                 <div className="bounds course--detail">
                     <div className="grid-66">
+                        {this.state.displayError ? <div>
+                            <h2 className="validation--errors--label"> Error</h2>
+                            <div className="validation-errors">
+                                <ul>
+                                    <li>{this.state.errorMsg}</li>
+                                </ul>
+                            </div>
+                        </div> : null }
                         <div className="course--header">
                             <h4 className="course--label">Course</h4>
                             <h3 className="course--title">{ title }</h3>
