@@ -6,12 +6,12 @@ const Header = (props) => {
         const signedInHeader =
             <nav>
                 <span> Welcome, { props.user.firstName } { props.user.lastName }</span>
-                <Link to='/sign-out' className="signout">Sign Out</Link>
+                <Link to='/signout' className="signout">Sign Out</Link>
             </nav>;
         const signedOutHeader =
             <nav>
-                <Link to='/sign-up' className="signup">Sign Up</Link>
-                <Link to='/sign-in' className="signin">Sign In</Link>
+                <Link to='/signup' className="signup">Sign Up</Link>
+                <Link to='/signin' className="signin">Sign In</Link>
             </nav>;
 
         return(

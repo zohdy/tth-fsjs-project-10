@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from "axios";
 import { withRouter } from "react-router-dom";
 import Link from "react-router-dom/es/Link";
+import ReactMarkdown from 'react-markdown';
 
 class CourseDetail extends Component {
 
@@ -61,19 +62,25 @@ class CourseDetail extends Component {
     };
 
     render() {
-        this.formatMaterials();
+        const currentUser = JSON.parse(localStorage.getItem('user'));
         const { title, description, estimatedTime } = this.state.course;
-        const { firstName, lastName } = this.state.courseOwner;
+        const { firstName, lastName, _id : ownerID } = this.state.courseOwner;
+
         return (
             <div>
                 <div className="actions--bar">
                     <div className="bounds">
                         <div className="grid-100">
-                            <span>
-                                <Link className="button" to={`/courses/${this.props.id}/update`}>Update Course</Link>
-                                <button className="button" onClick={this.deleteCourse}>Delete Course</button>
-                            </span>
-                                <Link className="button button-secondary" to="/">Return to List</Link>
+                            {/* Only display 'Update' and 'Delete' if the logged in userID matches the course owner ID */}
+                            { (currentUser) && currentUser._id === ownerID
+                                ?
+                                <span>
+                                    <Link className="button" to={`/courses/${this.props.id}/update`}>Update Course</Link>
+                                    <button className="button" onClick={this.deleteCourse}>Delete Course</button>
+                                </span>
+                                : null
+                            }
+                            <Link className="button button-secondary" to="/">Return to List</Link>
                         </div>
                     </div>
                 </div>
@@ -93,7 +100,7 @@ class CourseDetail extends Component {
                             <p>By { firstName } { lastName }</p>
                         </div>
                         <div className="course--description">
-                            <p>{ description }</p>
+                            <ReactMarkdown>{ description }</ReactMarkdown>
                         </div>
                     </div>
                     <div className="grid-25 grid-right">
@@ -106,8 +113,8 @@ class CourseDetail extends Component {
                                 <li className="course--stats--list--item">
                                     <h4>Materials Needed</h4>
                                     <ul>
-                                         {this.formatMaterials().map((item, index) => (
-                                            <li key={index}>{ item }</li>
+                                        {this.formatMaterials().map((item, index) => (
+                                            <ReactMarkdown key={index}>{ item }</ReactMarkdown>
                                         ))}
                                     </ul>
                                 </li>

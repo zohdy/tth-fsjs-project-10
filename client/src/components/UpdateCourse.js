@@ -33,7 +33,13 @@ class UpdateCourse extends Component {
                     materialsNeeded,
                 });
         } catch (e) {
-            this.props.history.push('/error')
+            if(e.response.status === 404) {
+                this.props.history.push('/not-found');
+            }  if(e.response.status === 401 || e.response.status === 403) {
+                this.props.history.push('/forbidden');
+            } else {
+                this.props.history.push('/error');
+            }
         }
     }
 

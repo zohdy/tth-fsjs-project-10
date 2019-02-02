@@ -6,7 +6,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
         localStorage.getItem('auth')
             ? <Component {...props} />
             : <Redirect to={{
-                pathname: '/sign-in',
+                pathname: '/signin',
                 state: { from: props.location }
             }}/>
         )}/>

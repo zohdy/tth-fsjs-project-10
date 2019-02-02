@@ -40,7 +40,7 @@ class UserSignUp extends Component {
                 } catch (e) {
                     if(e.response.status === 400){
                         this.setState({
-                            validationErrorMsg: 'All fields are required',
+                            validationErrorMsg: e.response.data.message,
                             displayError: true
                         });
                     }
@@ -129,7 +129,7 @@ class UserSignUp extends Component {
                             </form>
                         </div>
                         <p>&nbsp;</p>
-                        <p>Already have a user account? <Link to="sign-in">Click here</Link> to sign in!</p>
+                        <p>Already have a user account? <Link to="signin">Click here</Link> to sign in!</p>
                     </div>
                 </div>
         )

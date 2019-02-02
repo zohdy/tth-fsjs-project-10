@@ -739,7 +739,7 @@ input:focus {
     margin-left: 20px;
 }
 
-/* styles the validation errors */
+/* styles the validation errorComponents */
 .validation--errors--label {
     color: #7c689b;
     font-size: 28px;

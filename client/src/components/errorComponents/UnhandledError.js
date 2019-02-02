@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Error = (props) => {
+const UnhandledError = () => {
     return(
         <div className="bounds">
             <h1>Error</h1>
@@ -9,4 +9,4 @@ const Error = (props) => {
     )
 };
 
-export default Error;
+export default UnhandledError;

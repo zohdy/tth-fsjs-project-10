@@ -5,7 +5,7 @@ const UserSignOut = (props) => {
     if(localStorage.auth){
         props.signOut();
     }
-    return <Courses/>
+    return <Courses />
 };
 
 export default UserSignOut;

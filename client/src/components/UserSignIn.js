@@ -16,10 +16,17 @@ class UserSignIn extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.signIn(this.state.emailAddress, this.state.password);
+        this.props.signIn(this.state.emailAddress, this.state.password, this.props.history);
     };
 
+    test(){
+        console.log(this.state);
+        console.log(this.props)
+    }
+
     render() {
+        this.test();
+
         const { emailAddress, password } = this.state;
         const { from } = this.props.location.state || { from: { pathname: '/'}};
 
@@ -65,7 +72,7 @@ class UserSignIn extends Component {
                         </form>
                     </div>
                     <p>&nbsp;</p>
-                    <p>Don't have a user account? <Link to="sign-up">Click here</Link> to sign up!</p>
+                    <p>Don't have a user account? <Link to="signup">Click here</Link> to sign up!</p>
                 </div>
             </div>
         )

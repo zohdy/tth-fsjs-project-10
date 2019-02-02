@@ -3,8 +3,9 @@ import Courses from './components/Courses';
 import Header from "./components/Header";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import CourseDetail from "./components/CourseDetail";
-import NotFound from "./components/errors/NotFound";
-import Error from "./components/errors/Error";
+import NotFound from "./components/errorComponents/NotFound";
+import UnhandledError from "./components/errorComponents/UnhandledError";
+import Forbidden from './components/errorComponents/Forbidden';
 import CreateCourse from "./components/CreateCourse";
 import UserSignUp from "./components/UserSignUp";
 import UserSignIn from "./components/UserSignIn";
@@ -17,7 +18,7 @@ import PrivateRoute from "./components/PrivateRoute";
 class App extends Component {
   state = {
       currentUser: '',
-      signedIn: false
+      signedIn: false,
   };
 
   componentDidMount() {
@@ -37,7 +38,9 @@ class App extends Component {
               localStorage.setItem('auth', JSON.stringify(response.config.headers.Authorization));
               this.setState({ currentUser: response.data, signedIn: true});
       } catch (e) {
-          console.log(e);
+            if(e.response.status !== 401){
+                history.push('/error');
+            }
       }
    };
 
@@ -59,13 +62,14 @@ class App extends Component {
               <PrivateRoute path="/courses/create" component={CreateCourse} user={this.state.currentUser} /> } />
               <PrivateRoute path="/courses/:id/update" component={UpdateCourse}  /> } />
               <Route exact path="/" render={ () => <Courses /> } />
-              <Route exact path="/sign-in" render={ () => <UserSignIn signIn={this.signIn} />} />
-              <Route exact path="/sign-up" component={ UserSignUp } />
+              <Route exact path="/signin" render={ () => <UserSignIn signIn={this.signIn} />} />
+              <Route exact path="/signup" component={ UserSignUp } />
               <Route exact path="/courses/:id" render={ (props) => <CourseDetail id={props.match.params.id} /> } />
-              <Route exact path="/sign-out" render={() => <UserSignOut signOut={this.signOut}/>}/>
-              <Route path="/error" component={ Error } />
+              <Route exact path="/signout" render={() => <UserSignOut signOut={this.signOut}/>}/>
+              <Route path="/forbidden" component={ Forbidden } />
+              <Route path="/error" component={ UnhandledError } />
               <Route path="/page-not-found" component={ NotFound } />
-              <Route component={ Error } />
+              <Route component={ NotFound } />
           </Switch>
       </div>
     </BrowserRouter>
