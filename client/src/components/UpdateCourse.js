@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Link from "react-router-dom/es/Link";
 import { withRouter } from "react-router-dom";
-import { trimEmptyInput } from "../Utils";
 
 
 class UpdateCourse extends Component {
@@ -15,8 +14,6 @@ class UpdateCourse extends Component {
         materialsNeeded:'',
         errorMsgHeader: '',
         errorMsg: '',
-        descValidationMsg: '',
-        titleValidationMsg: '',
         hideValidationWrapper: true,
     };
 
@@ -51,20 +48,6 @@ class UpdateCourse extends Component {
     handleSubmit = async (e) => {
         e.preventDefault();
         const { title, description, estimatedTime, materialsNeeded, user } = this.state;
-
-        if (trimEmptyInput(title) || trimEmptyInput(description)) {
-            this.setState({
-                errorMsgHeader: 'Validation error',
-                descValidationMsg: 'Please provide a value for "Description',
-                titleValidationMsg: 'Please provide a value for "Title',
-                hideValidationWrapper: false
-            });
-        } else {
-            this.updateUser(user, title, description, estimatedTime, materialsNeeded);
-        }
-    };
-
-    updateUser = async (user, title, description, estimatedTime, materialsNeeded) => {
         try{
             const response = await axios.put(`http://localhost:5000/api/courses/${this.props.match.params.id}`, {
                 user,
@@ -78,21 +61,26 @@ class UpdateCourse extends Component {
                 this.props.history.goBack();
             }
         } catch (e) {
-            if(e.response.status === 403 || e.response.status === 401){
+            if(e.response.status === 400){
+                this.setState({
+                    errorMsgHeader: 'Validation error',
+                    errorMsg: e.response.data.message,
+                    hideValidationWrapper: false
+                });
+            }
+            if(e.response.status === 401 || e.response.status === 403){
                 this.setState({
                     errorMsgHeader: 'Authorization error',
                     errorMsg: e.response.data.message,
                     hideValidationWrapper: false
                 });
-            } else {
-                this.props.history.push('/error');
             }
         }
+
     };
 
     render() {
-        const { title, description, estimatedTime, materialsNeeded,
-            titleValidationMsg, descValidationMsg, errorMsgHeader, errorMsg
+        const { title, description, estimatedTime, materialsNeeded, errorMsgHeader, errorMsg
         } = this.state;
         return (
             <div className="bounds course--detail">
@@ -103,8 +91,6 @@ class UpdateCourse extends Component {
                         <div className="validation-errors">
                             <ul>
                                 <li>{ errorMsg }</li>
-                                <li>{ titleValidationMsg }</li>
-                                <li>{ descValidationMsg }</li>
                             </ul>
                         </div>
                     </div> : null }
@@ -146,7 +132,7 @@ class UpdateCourse extends Component {
                                                 id="estimatedTime"
                                                 name="estimatedTime"
                                                 onChange={ this.handleChange }
-                                                type="number"
+                                                type="text"
                                                 className="course--time--input"
                                                 value={ estimatedTime }
                                                 placeholder="Hours"/>

@@ -36,12 +36,18 @@ router.get('/:id', (req, res, next) => {
 // @access  Private
 router.post('/', authorize,(req, res, next) => {
     Course.create(req.body, (err) => {
-        if(err){
+        if(req.body.title.replace(/\s/g, "").length === 0){
+            const err = new Error('Title is required');
             err.status = 400;
             return next(err);
+        } else if (req.body.description.replace(/\s/g, "").length === 0){
+            const err = new Error('Description is required');
+            err.status = 400;
+            return next(err);
+        } else {
+            res.location('/');
+            return res.sendStatus(201);
         }
-        res.location('/');
-        return res.sendStatus(201);
     });
 });
 
@@ -51,20 +57,20 @@ router.post('/', authorize,(req, res, next) => {
 router.put('/:id', authorize,(req, res, next) => {
     Course.findById(req.params.id, (err, course) => {
         if (course.user.toString() === req.user._id.toString()) {
-            if(req.body.title && req.body.description){
-                course.updateOne(req.body, (err, result) => {
-                    if(err) return next(err);
-                    res.sendStatus(204);
-                });
-            } else if(!req.body.title){
+            if(req.body.title.replace(/\s/g, "").length === 0) {
                 const err = new Error('Title is required');
                 err.status = 400;
                 return next(err);
-            } else if(!req.body.description){
+            } else if (req.body.description.replace(/\s/g, "").length === 0) {
                 const err = new Error('Description is required');
                 err.status = 400;
                 return next(err);
-            } 
+            } else {
+                course.updateOne(req.body, (err, result) => {
+                    if (err) return next(err);
+                    res.sendStatus(204);
+                });
+            }
         } else {
             const err = new Error('Course can only be changed by original creator');
             err.status = 403;

@@ -67,7 +67,7 @@ class App extends Component {
               <PrivateRoute path="/courses/:id/update" component={UpdateCourse}  /> } />
               <Route exact path="/" render={ () => <Courses /> } />
               <Route exact path="/signin" render={ () => <UserSignIn signIn={this.signIn} authErrorMsg={this.state.authorizationErrorMsg} />} />
-              <Route exact path="/signup" component={ UserSignUp } />
+              <Route exact path="/signup" render={ () => <UserSignUp signIn={this.signIn} />  } />
               <Route exact path="/courses/:id" render={ (props) => <CourseDetail id={props.match.params.id} /> } />
               <Route exact path="/signout" render={() => <UserSignOut signOut={this.signOut}/>}/>
               <Route path="/forbidden" component={ Forbidden } />

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Link from "react-router-dom/es/Link";
 import axios from 'axios';
+import {withRouter} from "react-router-dom";
 
 class UserSignUp extends Component {
 
@@ -35,6 +36,7 @@ class UserSignUp extends Component {
                         this.setState({
                             displayError: false
                         });
+                        this.props.signIn(this.state.emailAddress, this.state.password, this.props.history);
                         this.props.history.push('/');
                     }
                 } catch (e) {
@@ -162,4 +164,4 @@ class UserSignUp extends Component {
     }
 }
 
-export default UserSignUp
+export default withRouter(UserSignUp)
