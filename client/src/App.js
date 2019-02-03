@@ -19,6 +19,7 @@ class App extends Component {
   state = {
       currentUser: '',
       signedIn: false,
+      authorizationErrorMsg: ''
   };
 
   componentDidMount() {
@@ -38,7 +39,10 @@ class App extends Component {
               localStorage.setItem('auth', JSON.stringify(response.config.headers.Authorization));
               this.setState({ currentUser: response.data, signedIn: true});
       } catch (e) {
-            if(e.response.status !== 401){
+            if(e.response.status === 401){
+                this.setState({ authorizationErrorMsg: e.response.data.message});
+                history.push('/signin');
+            } else {
                 history.push('/error');
             }
       }
@@ -62,7 +66,7 @@ class App extends Component {
               <PrivateRoute path="/courses/create" component={CreateCourse} user={this.state.currentUser} /> } />
               <PrivateRoute path="/courses/:id/update" component={UpdateCourse}  /> } />
               <Route exact path="/" render={ () => <Courses /> } />
-              <Route exact path="/signin" render={ () => <UserSignIn signIn={this.signIn} />} />
+              <Route exact path="/signin" render={ () => <UserSignIn signIn={this.signIn} authErrorMsg={this.state.authorizationErrorMsg} />} />
               <Route exact path="/signup" component={ UserSignUp } />
               <Route exact path="/courses/:id" render={ (props) => <CourseDetail id={props.match.params.id} /> } />
               <Route exact path="/signout" render={() => <UserSignOut signOut={this.signOut}/>}/>

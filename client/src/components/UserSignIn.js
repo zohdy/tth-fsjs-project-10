@@ -19,14 +19,8 @@ class UserSignIn extends Component {
         this.props.signIn(this.state.emailAddress, this.state.password, this.props.history);
     };
 
-    test(){
-        console.log(this.state);
-        console.log(this.props)
-    }
 
     render() {
-        this.test();
-
         const { emailAddress, password } = this.state;
         const { from } = this.props.location.state || { from: { pathname: '/'}};
 
@@ -40,6 +34,14 @@ class UserSignIn extends Component {
             <div className="bounds">
                 <div className="grid-33 centered signin">
                     <h1>Sign In</h1>
+                    {this.props.authErrorMsg ? <div>
+                        <h2 className="validation--errors--label">Validation Error</h2>
+                        <div className="validation-errors">
+                            <ul>
+                                <li>{ this.props.authErrorMsg }</li>
+                            </ul>
+                        </div>
+                    </div> : null }
                     <div>
                         <form onSubmit={this.handleSubmit}>
                             <div>

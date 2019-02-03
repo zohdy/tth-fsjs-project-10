@@ -40,7 +40,7 @@ class UserSignUp extends Component {
                 } catch (e) {
                     if(e.response.status === 400){
                         this.setState({
-                            validationErrorMsg: e.response.data.message,
+                            validationErrorMsg: this.handleValidationMsg(e.response.data.message),
                             displayError: true
                         });
                     }
@@ -51,6 +51,32 @@ class UserSignUp extends Component {
                     displayError: true
                 });
             }
+    };
+
+    handleValidationMsg = (errorResponse) => {
+        // Formatting the server response message to be rendered properly
+        const splitAndSpliced = errorResponse.split(':').splice(2 );
+        const formattedErrorMsg = [];
+        for(let i = 0; i < splitAndSpliced.length; i++){
+            if(i !== splitAndSpliced.length - 1){
+                formattedErrorMsg.push(splitAndSpliced[i].substring(1, splitAndSpliced[i].indexOf(',')));
+            } else {
+                formattedErrorMsg.push(splitAndSpliced[splitAndSpliced.length - 1].trim());
+            }
+        }
+
+        if(this.state.firstName === ''){
+            return formattedErrorMsg[0];
+        }
+        if(this.state.lastName === ''){
+            return formattedErrorMsg[0];
+        }
+        if(this.state.emailAddress === ''){
+            return formattedErrorMsg[0];
+        }
+        if(this.state.password === ''){
+            return formattedErrorMsg[0];
+        }
     };
 
     render() {
